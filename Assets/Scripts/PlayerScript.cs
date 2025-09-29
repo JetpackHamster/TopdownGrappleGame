@@ -1,4 +1,5 @@
 using UnityEngine;
+using TMPro;
 
 public class PlayerScript : MonoBehaviour
 {
@@ -10,6 +11,7 @@ public class PlayerScript : MonoBehaviour
     
     public int roundCount;
     public int grappleCount;
+    public int coinCount;
 
     public Color baseColor;
     public float grappleRange;
@@ -70,10 +72,14 @@ public class PlayerScript : MonoBehaviour
             Vector2 fVector = new Vector2(activeGrapple.transform.position.x - transform.position.x, activeGrapple.transform.position.y - transform.position.y);
             fVector.Normalize();
             gameObject.GetComponent<Rigidbody2D>().velocity += (fVector * 0.2f);
+            gameObject.transform.GetChild(0).transform.GetChild(0).GetComponent<LineRenderer>().SetPosition(0, gameObject.transform.GetChild(0).transform.position);
+            gameObject.transform.GetChild(0).transform.GetChild(0).GetComponent<LineRenderer>().SetPosition(1, activeGrapple.transform.position);
         }
 
         // disable grapple when RMB released
-        if (Input.GetMouseButtonUp(1)) {
+        if (Input.GetMouseButtonUp(1) && activeGrapple != null) {
+            gameObject.transform.GetChild(0).transform.GetChild(0).GetComponent<LineRenderer>().SetPosition(0, activeGrapple.transform.position);
+            gameObject.transform.GetChild(0).transform.GetChild(0).GetComponent<LineRenderer>().SetPosition(1, activeGrapple.transform.position);
             activeGrapple = null;
         }
 
@@ -109,7 +115,7 @@ public class PlayerScript : MonoBehaviour
             gameObject.GetComponent<Rigidbody2D>().velocity -= fVector;
         }
 
-        // collect items
+        // collect items by destroying them and applying their effects
         //Debug.Log(collision.transform.name);
         if (collision.transform.name.Equals("TriBundle(Clone)")) {
             GameObject.Destroy(collision.gameObject);
@@ -117,6 +123,13 @@ public class PlayerScript : MonoBehaviour
         } else if (collision.transform.name.Equals("RoundBundle(Clone)")) {
             GameObject.Destroy(collision.gameObject);
             roundCount += Random.Range(3,6);
+        } else if (collision.transform.name.Equals("Coin(Clone)")) {
+            GameObject.Destroy(collision.gameObject);
+            coinCount++;
+            if (coinCount > 3) {
+                Debug.Log("Game Win! at " + Time.time + " seconds");
+                GameObject.Find("MainCanvas").transform.GetChild(3).gameObject.GetComponent<TMP_Text>().text = ("Game Win! " + Time.time + " seconds");
+            }
         }
     }
 }
