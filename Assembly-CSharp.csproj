@@ -66,6 +66,7 @@
     <Compile Include="Assets\Scripts\PlayerScript.cs" />
     <Compile Include="Assets\Scripts\RoundScript.cs" />
     <Compile Include="Assets\Scripts\PlatformSpawnerScript.cs" />
+    <Compile Include="Assets\Scripts\ParticleDeletionScript.cs" />
     <Compile Include="Assets\Scripts\CameraScript.cs" />
     <Compile Include="Assets\Scripts\GrappleLauncher.cs" />
   </ItemGroup>

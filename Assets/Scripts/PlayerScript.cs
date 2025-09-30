@@ -12,6 +12,7 @@ public class PlayerScript : MonoBehaviour
     public int roundCount;
     public int grappleCount;
     public int coinCount;
+    bool isGrapplePull = true;
 
     public Color baseColor;
     public float grappleRange;
@@ -26,6 +27,7 @@ public class PlayerScript : MonoBehaviour
         // Set target frame rate to 120 FPS
         Application.targetFrameRate = 120;
 
+        // set layermask for grapple check raycast
         rayMask = LayerMask.GetMask("Level");
     }
 
@@ -36,7 +38,7 @@ public class PlayerScript : MonoBehaviour
         // find target direction for aim triangle
         Vector3 targetDirection = camPosition - transform.position;
         
-        // Calculate a rotation a step closer to the target and applies rotation to this object
+        // find correct rotation and aim toward cursor
         float rotation_z = Mathf.Atan2(targetDirection.y, targetDirection.x) * Mathf.Rad2Deg;
         transform.rotation = Quaternion.Euler(0f, 0f, rotation_z - 90);
         
@@ -60,23 +62,35 @@ public class PlayerScript : MonoBehaviour
             roundCount--;
         }
 
+        // disable grapple pull when scroll up, reenable with scroll down
+        if (Input.mouseScrollDelta.y > 1f * Time.deltaTime) {
+            isGrapplePull = false;
+        } else if (Input.mouseScrollDelta.y < -1f * Time.deltaTime) {
+            isGrapplePull = true;
+        }
+
         // when RMB first pressed, create grapple point
         if (Input.GetMouseButtonDown(1)) {
             if (hit && grappleCount > 0) {
                 activeGrapple = Instantiate(grappleSpawnable, hit.point, transform.rotation);
                 grappleCount--;
+                isGrapplePull = true;
             }
         }
-        // move towards activeGrapple when holding RMB
+        // when holding RMB
         if (Input.GetMouseButton(1) && activeGrapple != null) {
-            Vector2 fVector = new Vector2(activeGrapple.transform.position.x - transform.position.x, activeGrapple.transform.position.y - transform.position.y);
-            fVector.Normalize();
-            gameObject.GetComponent<Rigidbody2D>().velocity += (fVector * 0.2f);
+            // move towards activeGrapple if grapple set to pull
+            if (isGrapplePull) {
+                Vector2 fVector = new Vector2(activeGrapple.transform.position.x - transform.position.x, activeGrapple.transform.position.y - transform.position.y);
+                fVector.Normalize();
+                gameObject.GetComponent<Rigidbody2D>().velocity += (fVector * 0.2f);
+            }
+            // set rope render position
             gameObject.transform.GetChild(0).transform.GetChild(0).GetComponent<LineRenderer>().SetPosition(0, gameObject.transform.GetChild(0).transform.position);
             gameObject.transform.GetChild(0).transform.GetChild(0).GetComponent<LineRenderer>().SetPosition(1, activeGrapple.transform.position);
         }
 
-        // disable grapple when RMB released
+        // disable grapple and rope render when RMB released
         if (Input.GetMouseButtonUp(1) && activeGrapple != null) {
             gameObject.transform.GetChild(0).transform.GetChild(0).GetComponent<LineRenderer>().SetPosition(0, activeGrapple.transform.position);
             gameObject.transform.GetChild(0).transform.GetChild(0).GetComponent<LineRenderer>().SetPosition(1, activeGrapple.transform.position);
@@ -126,9 +140,10 @@ public class PlayerScript : MonoBehaviour
         } else if (collision.transform.name.Equals("Coin(Clone)")) {
             GameObject.Destroy(collision.gameObject);
             coinCount++;
-            if (coinCount > 3) {
+            // win game if enough coins collected
+            if (coinCount >= 4) {
                 Debug.Log("Game Win! at " + Time.time + " seconds");
-                GameObject.Find("MainCanvas").transform.GetChild(3).gameObject.GetComponent<TMP_Text>().text = ("Game Win! " + Time.time + " seconds");
+                GameObject.Find("MainCanvas").transform.GetChild(3).gameObject.GetComponent<TMP_Text>().text = ("Game Win! " + Mathf.FloorToInt(Time.time / 60) + ":" + Time.time % 60);
             }
         }
     }
