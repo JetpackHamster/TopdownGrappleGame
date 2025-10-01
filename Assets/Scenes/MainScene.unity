@@ -746,6 +746,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerObj: {fileID: 1935341853}
+  encounterPrefabs:
+  - {fileID: 8538411792139187493, guid: 65f11e13652bc0d4da48a5ee774e34d1, type: 3}
 --- !u!1 &569056266
 GameObject:
   m_ObjectHideFlags: 0
@@ -1673,6 +1675,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerObj: {fileID: 1935341853}
+  encounterPrefabs: []
 --- !u!114 &821880082
 MonoBehaviour:
   m_ObjectHideFlags: 0
