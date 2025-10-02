@@ -18,8 +18,8 @@ public class RoundScript : MonoBehaviour
         if (gameObject.GetComponent<Rigidbody2D>().velocity.magnitude < 6f && (Time.time - startTime > 0.2f)) {
             
             // stop rotation and disable sprite
-            gameObject.GetComponent<Rigidbody2D>().angularDrag = 100f;
-            gameObject.GetComponent<SpriteRenderer>().enabled = false;
+            //gameObject.GetComponent<Rigidbody2D>().angularDrag = 100f;
+            //gameObject.GetComponent<SpriteRenderer>().enabled = false;
             // play particles and destroy self
             Instantiate(roundParticleSpawnable, transform.position, transform.rotation);
             GameObject.Destroy(gameObject); 

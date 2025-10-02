@@ -21,8 +21,8 @@ public class CameraScript : MonoBehaviour
         // update position to player object position
         gameObject.transform.position = new Vector3 (playerObj.transform.position.x, playerObj.transform.position.y, -10F);
 
-        /*// spawn random encounters
-        while (Random.Range(0F, 10F) > 9.9F) { // TODO: improve random spawning to use deltaTime
+        // spawn random encounters
+        while (Random.Range(0F, 10F) > (10F - (0.5f * Time.deltaTime))) {
             int xDir = 0;
             while(xDir == 0) {
                 xDir = Random.Range(-1, 1);
@@ -31,8 +31,9 @@ public class CameraScript : MonoBehaviour
             while(yDir == 0) {
                 yDir = Random.Range(-1, 1);
             }
-            Instantiate(encounterPrefabs[Random.Range(0, encounterPrefabs.Length)], new Vector3(transform.position.x + Random.Range(50F, 60F) * xDir, transform.position.y + Random.Range(50F, 60F) * yDir, 0), new Quaternion(0F, 0F, Random.Range(-1F, 1F), 1F));
-        }*/
+            Debug.Log("xDir: " + xDir + " yDir: " + yDir);
+            Instantiate(encounterPrefabs[0], new Vector3(transform.position.x + Random.Range(50F, 60F) * xDir, transform.position.y + Random.Range(50F, 60F) * yDir, 0), new Quaternion(0F, 0F, Random.Range(-1F, 1F), 1F));
+        }
         //Debug.Log("Time.deltaTime: " + Time.deltaTime);
         // 0.07ish
 

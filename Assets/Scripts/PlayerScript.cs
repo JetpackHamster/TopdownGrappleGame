@@ -28,7 +28,7 @@ public class PlayerScript : MonoBehaviour
         Application.targetFrameRate = 120;
 
         // set layermask for grapple check raycast
-        rayMask = LayerMask.GetMask("Level");
+        rayMask = LayerMask.GetMask("Level", "Iso");
     }
 
     // Update is called once per frame
@@ -52,8 +52,8 @@ public class PlayerScript : MonoBehaviour
             gameObject.transform.GetChild(0).GetComponent<SpriteRenderer>().color = baseColor;
         }
 
-        // when LMB first pressed, fire round if round is had
-        if (Input.GetMouseButtonDown(0) && roundCount > 0 && Time.time > 2) {
+        // when LMB first pressed, or MMB held, fire round if round is had
+        if ((Input.GetMouseButtonDown(0) || Input.GetMouseButton(2)) && roundCount > 0 && Time.time > 2) {
             // create fired round and add velocity
             activeRound = Instantiate(roundSpawnable, transform.position + transform.up, transform.rotation);
             activeRound.GetComponent<Rigidbody2D>().velocity += new Vector2(activeRound.transform.up.x, activeRound.transform.up.y) * 30f;
@@ -72,7 +72,9 @@ public class PlayerScript : MonoBehaviour
         // when RMB first pressed, create grapple point
         if (Input.GetMouseButtonDown(1)) {
             if (hit && grappleCount > 0) {
-                activeGrapple = Instantiate(grappleSpawnable, hit.point, transform.rotation);
+                activeGrapple = Instantiate(grappleSpawnable, hit.point, transform.rotation, hit.transform);
+                // scale grapple down to correct size
+                activeGrapple.transform.localScale /= activeGrapple.transform.parent.transform.localScale.x;
                 grappleCount--;
                 isGrapplePull = true;
             }
