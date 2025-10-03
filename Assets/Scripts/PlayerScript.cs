@@ -138,14 +138,16 @@ public class PlayerScript : MonoBehaviour
             grappleCount += Random.Range(3,6);
         } else if (collision.transform.name.Equals("RoundBundle(Clone)")) {
             GameObject.Destroy(collision.gameObject);
-            roundCount += Random.Range(3,6);
+            roundCount += Random.Range(3,8);
         } else if (collision.transform.name.Equals("Coin(Clone)")) {
             GameObject.Destroy(collision.gameObject);
             coinCount++;
             // win game if enough coins collected
             if (coinCount >= 4) {
-                Debug.Log("Game Win! at " + Time.time + " seconds");
+                Debug.Log("Game Win! " + Mathf.FloorToInt(Time.time / 60) + ":" + Time.time % 60);
                 GameObject.Find("MainCanvas").transform.GetChild(3).gameObject.GetComponent<TMP_Text>().text = ("Game Win! " + Mathf.FloorToInt(Time.time / 60) + ":" + Time.time % 60);
+                grappleCount = 99999;
+                roundCount = 99999;
             }
         }
     }

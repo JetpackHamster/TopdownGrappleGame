@@ -5075,5 +5075,6 @@ MonoBehaviour:
   - {fileID: 3313173973741949061, guid: 3aa301a9af7ddbf48ad7fc85f1a8a361, type: 3}
   - {fileID: 6413513259410398586, guid: 8dfea1c9e464b8341967b4557633cf05, type: 3}
   terrainAvoidRange: 3
-  terrainStrafeRange: 3
+  terrainStrafeRange: 1.5
   targetSpeed: 6
+  strafeForce: 2

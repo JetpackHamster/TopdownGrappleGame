@@ -806,6 +806,7 @@ MonoBehaviour:
   encounterPrefabs:
   - {fileID: 8538411792139187493, guid: 65f11e13652bc0d4da48a5ee774e34d1, type: 3}
   - {fileID: 8538411792139187493, guid: 65f11e13652bc0d4da48a5ee774e34d1, type: 3}
+  encounterSpawnRate: 0.5
 --- !u!1 &569056266
 GameObject:
   m_ObjectHideFlags: 0
@@ -1733,6 +1734,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerObj: {fileID: 1935341853}
   encounterPrefabs: []
+  encounterSpawnRate: 0
 --- !u!114 &821880082
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -11,6 +11,8 @@ public class EnemyScript : MonoBehaviour
     public float terrainAvoidRange;
     public float terrainStrafeRange;
     public float targetSpeed;
+    float modifiedTargetSpeed;
+    public float strafeForce;
 
     float frameMoveAcceleration;
     bool isMoveLeft = false;
@@ -53,20 +55,23 @@ public class EnemyScript : MonoBehaviour
 
         // move forward when ray doesn't hit obstacle
         if (!hit) {
-            frameMoveAcceleration = (targetSpeed - gameObject.GetComponent<Rigidbody2D>().velocity.magnitude) * Time.deltaTime;
+            frameMoveAcceleration = (modifiedTargetSpeed - gameObject.GetComponent<Rigidbody2D>().velocity.magnitude) * Time.deltaTime;
         } else {
             frameMoveAcceleration = -1 * Time.deltaTime;
             // strafe away from obstacle
             if (isMoveLeft) {
-                gameObject.GetComponent<Rigidbody2D>().velocity += new Vector2(transform.right.x, transform.right.y) * -1.2f * Time.deltaTime;
+                gameObject.GetComponent<Rigidbody2D>().velocity += new Vector2(transform.right.x, transform.right.y) * -1f * strafeForce * Time.deltaTime;
             } else {
-                gameObject.GetComponent<Rigidbody2D>().velocity += new Vector2(transform.right.x, transform.right.y) * 1.2f * Time.deltaTime;
+                gameObject.GetComponent<Rigidbody2D>().velocity += new Vector2(transform.right.x, transform.right.y) * 1f * strafeForce * Time.deltaTime;
             }
         }
 
         if (frameMoveAcceleration != 0) {
             gameObject.GetComponent<Rigidbody2D>().velocity += new Vector2(transform.up.x, transform.up.y) * frameMoveAcceleration;
         }
+        
+        // reset modified target speed
+        modifiedTargetSpeed = targetSpeed;
     }
 
     void OnCollisionStay2D(Collision2D collision) {
@@ -86,6 +91,10 @@ public class EnemyScript : MonoBehaviour
             if (Random.Range(0F, 10F) > 9.6f && player.GetComponent<PlayerScript>().roundCount > 0) {
                 player.GetComponent<PlayerScript>().roundCount--;
             }   
+        
+        // make groups of Iso move faster
+        } else if (collision.transform.name.Equals("Iso(Clone)")) {
+            modifiedTargetSpeed *= 1.5f;
         }
         //Debug.Log(collision.transform.name);
 
