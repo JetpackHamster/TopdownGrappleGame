@@ -28,7 +28,7 @@ public class CameraScript : MonoBehaviour
             int xDir = Random.Range(-1, 1) * -2 - 1;
             int yDir = Random.Range(-1, 1) * -2 - 1;
 
-            Debug.Log("xDir: " + xDir + " yDir: " + yDir);
+            //Debug.Log("xDir: " + xDir + " yDir: " + yDir);
             Instantiate(encounterPrefabs[0], new Vector3(transform.position.x + Random.Range(40F, 60F) * xDir, transform.position.y + Random.Range(40F, 60F) * yDir, 0), new Quaternion(0F, 0F, Random.Range(-1F, 1F), 1F));
         }
         //Debug.Log("Time.deltaTime: " + Time.deltaTime);

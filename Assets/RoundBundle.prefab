@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6030704913040681652}
   - component: {fileID: 8446501564088877623}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: RoundBundle (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -101,7 +101,7 @@ GameObject:
   - component: {fileID: 1620154692307522484}
   - component: {fileID: 1744060573001830030}
   - component: {fileID: 84185955508814988}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: RoundBundle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -192,7 +192,7 @@ Rigidbody2D:
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
-  m_Mass: 1
+  m_Mass: 0.5
   m_LinearDrag: 0.1
   m_AngularDrag: 0.05
   m_GravityScale: 0
@@ -5053,7 +5053,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5919439800895813374}
   - component: {fileID: 1478036707106075744}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: RoundBundle (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}

@@ -3,9 +3,11 @@ using TMPro;
 
 public class PlayerScript : MonoBehaviour
 {
+    // prefabs to spawn gameobjects
     public GameObject grappleSpawnable;
     public GameObject roundSpawnable;
 
+    // gameobject references for other game objects being referred to
     GameObject activeGrapple;
     GameObject activeRound;
     
@@ -13,9 +15,12 @@ public class PlayerScript : MonoBehaviour
     public int grappleCount;
     public int coinCount;
     bool isGrapplePull = true;
-
-    public Color baseColor;
     public float grappleRange;
+
+    // base color for aim arrow
+    public Color baseColor;
+    
+    // layermask for raycast
     LayerMask rayMask;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -28,7 +33,7 @@ public class PlayerScript : MonoBehaviour
         Application.targetFrameRate = 120;
 
         // set layermask for grapple check raycast
-        rayMask = LayerMask.GetMask("Level", "Iso");
+        rayMask = LayerMask.GetMask("Level", "Iso", "Item");
     }
 
     // Update is called once per frame
@@ -85,17 +90,26 @@ public class PlayerScript : MonoBehaviour
             if (isGrapplePull) {
                 Vector2 fVector = new Vector2(activeGrapple.transform.position.x - transform.position.x, activeGrapple.transform.position.y - transform.position.y);
                 fVector.Normalize();
-                gameObject.GetComponent<Rigidbody2D>().velocity += (fVector * 0.2f);
+                // if other object has a rigidbody, pull it with an equal and opposite force
+                activeGrapple.transform.parent.TryGetComponent<Rigidbody2D>(out Rigidbody2D RB);
+                if (RB != null) {
+                    gameObject.GetComponent<Rigidbody2D>().velocity += (fVector * 0.1f);
+                    RB.velocity -= (fVector * 0.1f);
+                } else {
+                    gameObject.GetComponent<Rigidbody2D>().velocity += (fVector * 0.2f);
+                }
             }
             // set rope render position
+            gameObject.transform.GetChild(0).transform.GetChild(0).GetComponent<LineRenderer>().enabled = true;
             gameObject.transform.GetChild(0).transform.GetChild(0).GetComponent<LineRenderer>().SetPosition(0, gameObject.transform.GetChild(0).transform.position);
             gameObject.transform.GetChild(0).transform.GetChild(0).GetComponent<LineRenderer>().SetPosition(1, activeGrapple.transform.position);
         }
 
         // disable grapple and rope render when RMB released
         if (Input.GetMouseButtonUp(1) && activeGrapple != null) {
-            gameObject.transform.GetChild(0).transform.GetChild(0).GetComponent<LineRenderer>().SetPosition(0, activeGrapple.transform.position);
-            gameObject.transform.GetChild(0).transform.GetChild(0).GetComponent<LineRenderer>().SetPosition(1, activeGrapple.transform.position);
+            gameObject.transform.GetChild(0).transform.GetChild(0).GetComponent<LineRenderer>().enabled = false;
+            //gameObject.transform.GetChild(0).transform.GetChild(0).GetComponent<LineRenderer>().SetPosition(0, activeGrapple.transform.position);
+            //gameObject.transform.GetChild(0).transform.GetChild(0).GetComponent<LineRenderer>().SetPosition(1, activeGrapple.transform.position);
             activeGrapple = null;
         }
 
@@ -134,13 +148,13 @@ public class PlayerScript : MonoBehaviour
         // collect items by destroying them and applying their effects
         //Debug.Log(collision.transform.name);
         if (collision.transform.name.Equals("TriBundle(Clone)")) {
-            GameObject.Destroy(collision.gameObject);
+            DestroyItem(collision.gameObject);
             grappleCount += Random.Range(3,6);
         } else if (collision.transform.name.Equals("RoundBundle(Clone)")) {
-            GameObject.Destroy(collision.gameObject);
+            DestroyItem(collision.gameObject);
             roundCount += Random.Range(3,8);
         } else if (collision.transform.name.Equals("Coin(Clone)")) {
-            GameObject.Destroy(collision.gameObject);
+            DestroyItem(collision.gameObject);
             coinCount++;
             // win game if enough coins collected
             if (coinCount >= 4) {
@@ -150,5 +164,15 @@ public class PlayerScript : MonoBehaviour
                 roundCount = 99999;
             }
         }
+    }
+
+    // ensure grapple disabled if attached to destroyed item
+    void DestroyItem(GameObject obj) {
+        //Debug.Log("byebye to " + obj + "AGParent: " + activeGrapple.transform.parent);
+        if (activeGrapple != null && obj == activeGrapple.transform.parent.gameObject) {
+            Debug.Log("destroying rope");
+            gameObject.transform.GetChild(0).transform.GetChild(0).GetComponent<LineRenderer>().enabled = false;
+        }
+        GameObject.Destroy(obj);
     }
 }
