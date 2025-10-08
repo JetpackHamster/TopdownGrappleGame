@@ -6,6 +6,7 @@ public class PlayerScript : MonoBehaviour
     // prefabs to spawn gameobjects
     public GameObject grappleSpawnable;
     public GameObject roundSpawnable;
+    public GameObject explodeParticlesSpawnable;
 
     // gameobject references for other game objects being referred to
     GameObject activeGrapple;
@@ -16,6 +17,9 @@ public class PlayerScript : MonoBehaviour
     public int coinCount;
     bool isGrapplePull = true;
     public float grappleRange;
+
+    public bool isExplodified;
+    bool isDead;
 
     // base color for aim arrow
     public Color baseColor;
@@ -39,6 +43,19 @@ public class PlayerScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        // explode if exploded
+        if (isExplodified & !isDead) {
+            Instantiate(explodeParticlesSpawnable, transform.position, transform.rotation);
+            gameObject.GetComponent<SpriteRenderer>().enabled = false;
+            gameObject.GetComponent<CircleCollider2D>().enabled = false;
+            gameObject.GetComponent<Rigidbody2D>().drag = 0f;
+            // display game lose // TODO: disable aim arrow render
+            GameObject.Find("MainCanvas").transform.GetChild(3).gameObject.GetComponent<TMP_Text>().color = Color.red;
+            GameObject.Find("MainCanvas").transform.GetChild(3).gameObject.GetComponent<TMP_Text>().text = ("Game Lose! " + Mathf.FloorToInt(Time.time / 60) + ":" + Time.time % 60);
+
+            isDead = true;
+        }
+
         Vector3 camPosition = Camera.main.GetComponent<Camera>().ScreenToWorldPoint(Input.mousePosition);
         // find target direction for aim triangle
         Vector3 targetDirection = camPosition - transform.position;
@@ -170,7 +187,7 @@ public class PlayerScript : MonoBehaviour
     void DestroyItem(GameObject obj) {
         //Debug.Log("byebye to " + obj + "AGParent: " + activeGrapple.transform.parent);
         if (activeGrapple != null && obj == activeGrapple.transform.parent.gameObject) {
-            Debug.Log("destroying rope");
+            //Debug.Log("destroying rope");
             gameObject.transform.GetChild(0).transform.GetChild(0).GetComponent<LineRenderer>().enabled = false;
         }
         GameObject.Destroy(obj);

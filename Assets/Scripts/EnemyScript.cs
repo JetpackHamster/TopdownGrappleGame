@@ -82,7 +82,10 @@ public class EnemyScript : MonoBehaviour
             if (Random.Range(0F, 10F) > 7f) {
                 Instantiate(lootSpawnable[Random.Range(0, lootSpawnable.Length)], transform.position, transform.rotation);
             }
+            // report death to total iso count
+            GameObject.Find("Main Camera").GetComponent<CameraScript>().worldIsoCount--;
             GameObject.Destroy(gameObject);
+
         } else if (collision.transform.name.Equals("Player")) {
             // detect player impact and steal resources
             if (Random.Range(0F, 10F) > 9.6f && player.GetComponent<PlayerScript>().grappleCount > 0) {
@@ -90,7 +93,12 @@ public class EnemyScript : MonoBehaviour
             }   
             if (Random.Range(0F, 10F) > 9.6f && player.GetComponent<PlayerScript>().roundCount > 0) {
                 player.GetComponent<PlayerScript>().roundCount--;
-            }   
+            } 
+
+            // explode player when player is robbed of all resources
+            if(player.GetComponent<PlayerScript>().grappleCount <= 0 && player.GetComponent<PlayerScript>().roundCount <= 0 && Random.Range(0F, 10F) > 9.9f) {
+                player.GetComponent<PlayerScript>().isExplodified = true;
+            }
         
         // make groups of Iso move faster
         } else if (collision.transform.name.Equals("Iso(Clone)")) {

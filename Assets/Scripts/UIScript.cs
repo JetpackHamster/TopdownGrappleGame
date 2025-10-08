@@ -4,10 +4,13 @@ using TMPro;
 public class UIScript : MonoBehaviour
 {
     public GameObject player;
+    GameObject mainCam;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         player = GameObject.FindWithTag("Player");
+        mainCam = GameObject.Find("Main Camera");
     }
 
     // Update is called once per frame
@@ -26,5 +29,7 @@ public class UIScript : MonoBehaviour
         // display player velocity
         gameObject.transform.GetChild(4).gameObject.transform.GetChild(0).GetComponent<TMP_Text>().text = (("" + Mathf.Round(player.GetComponent<Rigidbody2D>().velocity.magnitude * 10) / 10f) + " m/s");  
 
+        // display world iso count from main camera
+        gameObject.transform.GetChild(5).GetComponent<TMP_Text>().text = ("" + mainCam.GetComponent<CameraScript>().worldIsoCount);
     }
 }
