@@ -10,9 +10,12 @@ public class EnemyScript : MonoBehaviour
 
     public float terrainAvoidRange;
     public float terrainStrafeRange;
+    public float strafeForce;
+
     public float targetSpeed;
     float modifiedTargetSpeed;
-    public float strafeForce;
+
+    public float particleDistance;
 
     float frameMoveAcceleration;
     bool isMoveLeft = false;
@@ -33,6 +36,13 @@ public class EnemyScript : MonoBehaviour
     {
         // find player direction
         Vector3 targetDirection = player.transform.position - transform.position;
+        
+        // disable particles when far from player
+        if (targetDirection.magnitude > particleDistance && gameObject.GetComponent<ParticleSystem>().isPlaying) {
+            gameObject.GetComponent<ParticleSystem>().Stop();
+        } else if (gameObject.GetComponent<ParticleSystem>().isStopped) {
+            gameObject.GetComponent<ParticleSystem>().Play();
+        }
 
         // find correct rotation and aim toward player
         float rotation_z = Mathf.Atan2(targetDirection.y, targetDirection.x) * Mathf.Rad2Deg;
@@ -66,6 +76,13 @@ public class EnemyScript : MonoBehaviour
             }
         }
 
+        // limit acceleration during game freezes
+        if (frameMoveAcceleration > 10f) {
+            Debug.Log("Iso acceleration limited");
+            frameMoveAcceleration = 10f * Mathf.Sign(frameMoveAcceleration);
+        }
+
+        // apply move force
         if (frameMoveAcceleration != 0) {
             gameObject.GetComponent<Rigidbody2D>().velocity += new Vector2(transform.up.x, transform.up.y) * frameMoveAcceleration;
         }

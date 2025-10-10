@@ -5076,5 +5076,6 @@ MonoBehaviour:
   - {fileID: 6413513259410398586, guid: 8dfea1c9e464b8341967b4557633cf05, type: 3}
   terrainAvoidRange: 3
   terrainStrafeRange: 1.5
-  targetSpeed: 6
   strafeForce: 2
+  targetSpeed: 6
+  particleDistance: 60

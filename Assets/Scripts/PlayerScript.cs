@@ -46,7 +46,9 @@ public class PlayerScript : MonoBehaviour
         // explode if exploded
         if (isExplodified & !isDead) {
             Instantiate(explodeParticlesSpawnable, transform.position, transform.rotation);
+            // disable player render and drag
             gameObject.GetComponent<SpriteRenderer>().enabled = false;
+            transform.GetChild(0).GetComponent<SpriteRenderer>().enabled = false;
             gameObject.GetComponent<CircleCollider2D>().enabled = false;
             gameObject.GetComponent<Rigidbody2D>().drag = 0f;
             // display game lose // TODO: disable aim arrow render

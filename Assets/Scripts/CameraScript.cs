@@ -9,6 +9,7 @@ public class CameraScript : MonoBehaviour
     public GameObject[] encounterPrefabs;
 
     public float encounterSpawnRate;
+    public float enemyGrowthRate;
     public int worldIsoCount;
 
 
@@ -25,7 +26,7 @@ public class CameraScript : MonoBehaviour
         gameObject.transform.position = new Vector3 (playerObj.transform.position.x, playerObj.transform.position.y, -10F);
 
         // spawn random encounters
-        while ((encounterSpawnRate + (Time.time * 0.1f * encounterSpawnRate)) * Time.deltaTime > 10f || Random.Range(0F, 10F) > (10F - ((encounterSpawnRate + (Time.time * 0.1f * encounterSpawnRate)) * Time.deltaTime))) {
+        while ((encounterSpawnRate + (Time.time * enemyGrowthRate * 0.1f * encounterSpawnRate)) * Time.deltaTime > 10f || Random.Range(0F, 10F) > (10F - ((encounterSpawnRate + (Time.time * 0.1f * encounterSpawnRate)) * Time.deltaTime))) {
             int xDir = Random.Range(-1, 1) * -2 - 1;
             int yDir = Random.Range(-1, 1) * -2 - 1;
 
