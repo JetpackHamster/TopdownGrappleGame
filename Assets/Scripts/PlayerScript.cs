@@ -1,3 +1,11 @@
+/****************************************************************************
+ *  File Name: PlayerScript.cs
+ *  Author: Skye Drury
+ *  Digipen Email: skye.drury@digipen.edu
+ *  Course: VGP
+ *  Description: gets player inputs and manages player behavior
+****************************************************************************/
+
 using UnityEngine;
 using TMPro;
 
@@ -51,14 +59,14 @@ public class PlayerScript : MonoBehaviour
             transform.GetChild(0).GetComponent<SpriteRenderer>().enabled = false;
             gameObject.GetComponent<CircleCollider2D>().enabled = false;
             gameObject.GetComponent<Rigidbody2D>().drag = 0f;
-            // display game lose // TODO: disable aim arrow render
+            // display game lose
             GameObject.Find("MainCanvas").transform.GetChild(3).gameObject.GetComponent<TMP_Text>().color = Color.red;
             GameObject.Find("MainCanvas").transform.GetChild(3).gameObject.GetComponent<TMP_Text>().text = ("Game Lose! " + Mathf.FloorToInt(Time.time / 60) + ":" + Time.time % 60);
-
             isDead = true;
         }
 
         Vector3 camPosition = Camera.main.GetComponent<Camera>().ScreenToWorldPoint(Input.mousePosition);
+        
         // find target direction for aim triangle
         Vector3 targetDirection = camPosition - transform.position;
         
@@ -77,7 +85,7 @@ public class PlayerScript : MonoBehaviour
         }
 
         // when LMB first pressed, or MMB held, fire round if round is had
-        if ((Input.GetMouseButtonDown(0) || Input.GetMouseButton(2)) && roundCount > 0 && Time.time > 2) {
+        if ((Input.GetMouseButtonDown(0) || Input.GetMouseButton(2)) && roundCount > 0 && Time.time > 2 && (Input.mousePosition.y > 20f)) {
             // create fired round and add velocity
             activeRound = Instantiate(roundSpawnable, transform.position + transform.up, transform.rotation);
             activeRound.GetComponent<Rigidbody2D>().velocity += new Vector2(activeRound.transform.up.x, activeRound.transform.up.y) * 30f;

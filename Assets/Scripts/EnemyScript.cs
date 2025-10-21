@@ -24,7 +24,7 @@ public class EnemyScript : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        // set layermask for navigation raycast
+        // set layermask for navigation raycasts
         rayMask_Level = LayerMask.GetMask("Level");
         
         // define player reference

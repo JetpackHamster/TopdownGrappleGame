@@ -36,10 +36,7 @@ public class CameraScript : MonoBehaviour
 
         }
         //Debug.Log("Time.deltaTime: " + Time.deltaTime);
-        // 0.07ish
-        if(Time.time % 10 == 0) {
-            Debug.Log("encounterSpawnRate: " + (encounterSpawnRate + (Time.time * 0.1f * encounterSpawnRate)));
-        }
+        //Debug.Log("encounterSpawnRate: " + (encounterSpawnRate + (Time.time * 0.1f * encounterSpawnRate)));
 
     }
 }
